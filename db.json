@@ -1,0 +1,15 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "Первый пост",
+      "content": "что-то пишу",
+      "author": {
+        "id": 1,
+        "name": "Polina - admin"
+      },
+      "createdAt": "2025-02-10T10:00:00.000Z",
+      "published": true
+    }
+  ]
+}
