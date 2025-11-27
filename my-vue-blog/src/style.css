@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #ffffff; /* текст светлый для тёмной темы */
+  background-color: #8b3a3a; /* тёмно-розовый для тёмной темы */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -65,10 +65,11 @@ button:focus-visible {
   text-align: center;
 }
 
+/* Светлая тема */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: #333333; /* текст тёмный */
+    background-color: #ffe6e6; /* светло-розовый фон */
   }
   a:hover {
     color: #747bff;
