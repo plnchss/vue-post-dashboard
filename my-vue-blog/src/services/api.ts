@@ -1,30 +1,36 @@
+// src/services/api.ts
+import axios from "axios";
 import type { Post } from "../types";
 
 const API_URL = "http://localhost:3000/posts";
 
-export async function getPosts(): Promise<Post[]> {
-  const res = await fetch(API_URL);
-  return await res.json();
+// Получение всех постов
+export async function fetchPosts(): Promise<Post[]> {
+  const res = await axios.get(API_URL);
+  return res.data;
 }
 
-export async function createPost(newPost: Omit<Post, "id">): Promise<Post> {
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newPost),
-  });
-  return await res.json();
+// Добавление нового поста
+export async function addNewPost(post: { title: string; content: string }): Promise<Post> {
+  const newPost: Post = {
+    id: Date.now().toString(),
+    title: post.title,
+    content: post.content,
+    author: { id: 1, name: "Polina :)" },
+    createdAt: new Date().toISOString(),
+    published: true,
+  };
+  const res = await axios.post(API_URL, newPost);
+  return res.data;
 }
 
+// Удаление поста по ID
 export async function deletePost(id: string): Promise<void> {
-  await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  await axios.delete(`${API_URL}/${id}`);
 }
 
-export async function updatePost(id: string, updated: Partial<Post>): Promise<Post> {
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updated),
-  });
-  return await res.json();
+// Обновление поста
+export async function updatePost(id: string, updatedFields: Partial<Post>): Promise<Post> {
+  const res = await axios.patch(`${API_URL}/${id}`, updatedFields);
+  return res.data;
 }

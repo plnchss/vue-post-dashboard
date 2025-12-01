@@ -7,15 +7,13 @@ export function usePosts() {
   const posts = ref<any[]>([]);
   const loading = ref(false);
 
-  // Получение постов с сервера
   const fetchPosts = async () => {
     loading.value = true;
     try {
       const res = await axios.get(API_URL);
       posts.value = res.data;
-      console.log("Fetched posts:", posts.value); // <-- проверка
     } catch (err) {
-      console.error("Ошибка при получении постов", err);
+      console.error(err);
     } finally {
       loading.value = false;
     }
@@ -49,7 +47,7 @@ export function usePosts() {
 
   const updatePost = async (updatedPost: any) => {
     try {
-      await axios.put(`${API_URL}/${updatedPost.id}`, updatedPost);
+      await axios.patch(`${API_URL}/${updatedPost.id}`, updatedPost);
       const index = posts.value.findIndex(p => p.id === updatedPost.id);
       if (index !== -1) posts.value[index] = updatedPost;
     } catch (err) {

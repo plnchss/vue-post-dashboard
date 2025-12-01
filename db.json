@@ -3,13 +3,63 @@
     {
       "id": 1,
       "title": "Первый пост",
-      "content": "что-то пишу",
+      "content": "Это пример записи.",
       "author": {
         "id": 1,
-        "name": "Polina - admin"
+        "name": "Admin"
       },
       "createdAt": "2025-02-10T10:00:00.000Z",
       "published": true
+    },
+    {
+      "id": "1764579000611",
+      "title": "правки",
+      "content": "ы работае урааааа",
+      "author": {
+        "id": 1,
+        "name": "Polina :)"
+      },
+      "createdAt": "2025-12-01T08:50:00.611Z",
+      "published": true,
+      "image": "https://cataas.com/cat?width=400&height=200&random=1764579000611",
+      "updatedAt": "2025-12-01T08:50:30.987Z"
+    },
+    {
+      "id": "1764579005622",
+      "title": "правки 2",
+      "content": "вроде работает ",
+      "author": {
+        "id": 1,
+        "name": "Polina :)"
+      },
+      "createdAt": "2025-12-01T08:50:05.622Z",
+      "published": true,
+      "image": "https://cataas.com/cat?width=400&height=200&random=1764579005622",
+      "updatedAt": "2025-12-01T08:50:22.231Z"
+    },
+    {
+      "id": "1764579047284",
+      "title": "привет все работает ",
+      "content": "проверка ЖОСКАЯ",
+      "author": {
+        "id": 1,
+        "name": "Polina :)"
+      },
+      "createdAt": "2025-12-01T08:50:47.284Z",
+      "published": true,
+      "image": "https://cataas.com/cat?width=400&height=200&random=1764579047284"
+    },
+    {
+      "id": "1764579452362",
+      "title": "привет черновик",
+      "content": "привет черновиек пока черновик",
+      "author": {
+        "id": 1,
+        "name": "Polina :)"
+      },
+      "createdAt": "2025-12-01T08:57:32.362Z",
+      "published": true,
+      "updatedAt": "2025-12-01T08:57:44.167Z"
     }
   ]
 }

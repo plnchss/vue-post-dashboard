@@ -9,5 +9,7 @@ export interface Post {
   content: string;
   author: Author;
   createdAt: string;
+  updatedAt?: string;
   published: boolean;
+  image?: string;
 }

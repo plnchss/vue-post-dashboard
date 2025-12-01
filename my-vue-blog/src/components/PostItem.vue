@@ -1,11 +1,7 @@
 <template>
   <div class="post">
-    <img 
-  :src="post.image || `https://cataas.com/cat?width=400&height=200&random=${post.id}`" 
-  alt="Котик" 
-  class="post-img" 
-/>
-    <!-- Просмотр поста -->
+    <img :src="post.image || `https://cataas.com/cat?width=400&height=200&random=${post.id}`" alt="Котик" class="post-img" />
+
     <div v-if="!editing">
       <h3>{{ post.title }}</h3>
       <p>{{ post.content }}</p>
@@ -15,11 +11,10 @@
       </p>
       <small>Автор: {{ post.author.name }}</small>
       <br />
-      <button class="edit-btn" @click="startEdit">Редактировать ✎</button>
-      <button class="delete-btn" @click="removePost(post.id)">Удалить 🗑</button>
+      <button class="edit-btn" @click="startEdit">Редактировать</button>
+      <button class="delete-btn" @click="removePost(post.id)">Удалить</button>
     </div>
 
-    <!-- Редактирование поста -->
     <div v-else>
       <input v-model="editTitle" />
       <textarea v-model="editContent"></textarea>
@@ -36,11 +31,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { Post } from "../types";
-import { updatePost } from "../services/api";
 
 const props = defineProps<{
   post: Post;
-  removePost: (id: string) => void;
+  removePost: (id: string) => Promise<void>;
+  updatePost: (post: Post) => Promise<void>;
 }>();
 
 const emit = defineEmits<{
@@ -53,7 +48,6 @@ const editContent = ref("");
 const saving = ref(false);
 const error = ref("");
 
-// Начать редактирование
 function startEdit() {
   editing.value = true;
   editTitle.value = props.post.title;
@@ -61,33 +55,26 @@ function startEdit() {
   error.value = "";
 }
 
-// Отмена редактирования
 function cancelEdit() {
   editing.value = false;
 }
 
-// Форматируем дату
 function formatDate(dateStr: string) {
   const d = new Date(dateStr);
-  return d.toLocaleDateString("ru-RU", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return d.toLocaleDateString("ru-RU", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
-// Сохраняем изменения
 async function saveEdit() {
   saving.value = true;
   error.value = "";
   try {
-    const updated = await updatePost(props.post.id, {
+    const updated: Post = {
+      ...props.post,
       title: editTitle.value,
       content: editContent.value,
-      updatedAt: new Date().toISOString(), // обновляем дату редактирования
-    });
+      updatedAt: new Date().toISOString()
+    };
+    await props.updatePost(updated);
     emit("updated", updated);
     editing.value = false;
   } catch (e) {
@@ -108,6 +95,12 @@ async function saveEdit() {
   box-shadow: 1px 1px 5px rgba(0,0,0,0.05);
 }
 
+.post-img {
+  width: 50%;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
 .post button {
   margin-right: 0.5rem;
   padding: 0.3rem 0.6rem;
@@ -116,31 +109,11 @@ async function saveEdit() {
   cursor: pointer;
 }
 
-.post-img {
-  width: 50%;
-  border-radius: 6px;
-  margin-bottom: 0.5rem;
-}
+.edit-btn { background-color: #ffc107; color: #fff; }
+.delete-btn { background-color: #dc3545; color: #fff; }
 
-
-.edit-btn {
-  background-color: #ffc107;
-  color: #fff;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-.post button:hover {
-  opacity: 0.8;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.post button:hover { opacity: 0.8; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 input, textarea {
   width: 100%;
@@ -155,14 +128,6 @@ input:focus, textarea:focus {
   outline: none;
 }
 
-.error {
-  color: red;
-  font-size: 0.9rem;
-}
-
-.post-date {
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-}
+.error { color: red; font-size: 0.9rem; }
+.post-date { font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; }
 </style>

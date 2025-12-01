@@ -1,117 +1,109 @@
 <template>
-  <div>
-    <h2>Создать пост (=^･ｪ･^=)</h2>
-
-    <form @submit.prevent="submit">
-      <input
-        v-model="title"
-        placeholder="Заголовок"
-        :aria-invalid="!!errors.title"
-        :aria-describedby="'title-error'"
-        required
-      />
-      <div id="title-error" v-if="errors.title" style="color:red">{{ errors.title }}</div>
-
-      <br /><br />
-
-      <textarea
-        v-model="content"
-        placeholder="Текст"
-        :aria-invalid="!!errors.content"
-        :aria-describedby="'content-error'"
-        required
-      ></textarea>
-      <div id="content-error" v-if="errors.content" style="color:red">{{ errors.content }}</div>
-
-      <br /><br />
-
-      <button type="submit" :disabled="saving">
-        {{ saving ? "Сохраняем..." : "Добавить" }}
-      </button>
-      <button type="button" @click="resetDraft" :disabled="saving">Сбросить черновик</button>
-    </form>
-
-    <hr />
+  <div class="new-post-form">
+    <h3>Новая запись</h3>
+    <input v-model="title" placeholder="Заголовок" />
+    <textarea v-model="content" placeholder="Содержание"></textarea>
+    <br />
+    <button @click="addPost" :disabled="saving">
+      {{ saving ? "Сохраняем..." : "Добавить" }}
+    </button>
+    <div v-if="draftExists" class="draft-note">
+      Черновик восстановлен из предыдущей сессии.
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
-import { usePosts } from "../composables/usePosts";
+import { addNewPost } from "../services/api";
 
 const title = ref("");
 const content = ref("");
 const saving = ref(false);
-const errors = ref<{ title?: string; content?: string }>({});
 
-const { addPost } = usePosts();
+const DRAFT_KEY = "blog-draft";
 
-// Ключ в localStorage
-const DRAFT_KEY = "new-post-draft";
+// Проверяем наличие черновика в localStorage
+const draftExists = ref(false);
 
-// Восстанавливаем черновик при монтировании
 onMounted(() => {
   const draft = localStorage.getItem(DRAFT_KEY);
   if (draft) {
-    const data = JSON.parse(draft);
-    title.value = data.title || "";
-    content.value = data.content || "";
+    try {
+      const obj = JSON.parse(draft);
+      title.value = obj.title || "";
+      content.value = obj.content || "";
+      if (title.value || content.value) draftExists.value = true;
+    } catch {
+      console.warn("Ошибка при восстановлении черновика");
+    }
   }
 });
 
-// Debounced watch для автосохранения
-let timeout: number;
-watch([title, content], () => {
-  clearTimeout(timeout);
-  timeout = window.setTimeout(() => {
-    localStorage.setItem(
-      DRAFT_KEY,
-      JSON.stringify({ title: title.value, content: content.value })
-    );
-  }, 500);
+// Сохраняем черновик в localStorage при изменении
+watch([title, content], ([newTitle, newContent]) => {
+  localStorage.setItem(DRAFT_KEY, JSON.stringify({ title: newTitle, content: newContent }));
 });
 
-function validate() {
-  const errs: typeof errors.value = {};
-  if (!title.value.trim()) errs.title = "Заголовок обязателен";
-  if (!content.value.trim()) errs.content = "Текст обязателен";
-  errors.value = errs;
-  return Object.keys(errs).length === 0;
-}
-
-async function submit() {
-  if (!validate()) return;
+// Добавление нового поста
+async function addPost() {
+  if (!title.value || !content.value) return;
 
   saving.value = true;
-
-  // Оптимистичное добавление: сразу показываем пост
-  const optimisticTitle = title.value;
-  const optimisticContent = content.value;
-
   try {
-    await addPost(optimisticTitle, optimisticContent);
-    resetDraft(); // очистка черновика
+    await addNewPost({ title: title.value, content: content.value });
+    // Очищаем форму и черновик
     title.value = "";
     content.value = "";
+    localStorage.removeItem(DRAFT_KEY);
+    draftExists.value = false;
   } catch (e) {
-    alert("Ошибка при добавлении поста!");
+    alert("Ошибка при добавлении поста");
   } finally {
     saving.value = false;
   }
 }
-
-function resetDraft() {
-  localStorage.removeItem(DRAFT_KEY);
-  title.value = "";
-  content.value = "";
-}
 </script>
 
 <style scoped>
-input,
-textarea {
+.new-post-form {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.05);
+}
+
+input, textarea {
   width: 100%;
-  margin-bottom: 0.01
-  rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input:focus, textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.draft-note {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
 }
 </style>
