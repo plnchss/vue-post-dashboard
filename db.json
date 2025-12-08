@@ -1,7 +1,7 @@
 {
   "posts": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Первый пост",
       "content": "Это пример записи.",
       "author": {
@@ -52,14 +52,38 @@
     {
       "id": "1764579452362",
       "title": "привет черновик",
-      "content": "привет черновиек пока черновик",
+      "content": "привет черновиек пока черновик ваываываыв",
       "author": {
         "id": 1,
         "name": "Polina :)"
       },
       "createdAt": "2025-12-01T08:57:32.362Z",
       "published": true,
-      "updatedAt": "2025-12-01T08:57:44.167Z"
+      "updatedAt": "2025-12-02T10:33:58.947Z"
+    },
+    {
+      "id": "1764671752382",
+      "title": "авпывпшрвыоп",
+      "content": "ываываывпыпд",
+      "author": {
+        "id": 1,
+        "name": "Polina :)"
+      },
+      "createdAt": "2025-12-02T10:35:52.382Z",
+      "published": true
+    },
+    {
+      "id": "1765205100742",
+      "title": "фывфывф",
+      "content": "ыфвфвфыв вфыв ывв ф вфв ф ыаы впириает",
+      "author": {
+        "id": 1,
+        "name": "Polina :)"
+      },
+      "createdAt": "2025-12-08T14:45:00.742Z",
+      "published": true,
+      "image": "https://cataas.com/cat?width=400&height=200&random=1765205100742",
+      "updatedAt": "2025-12-08T14:47:55.740Z"
     }
   ]
 }

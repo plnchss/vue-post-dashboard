@@ -1,80 +1,87 @@
+/* Глобальные переменные и стили корня */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; /* базовый шрифт */
+  line-height: 1.5; /* высота строки */
+  font-weight: 400; /* стандартная толщина шрифта */
 
-  color-scheme: light dark;
-  color: #ffffff; /* текст светлый для тёмной темы */
-  background-color: #8b3a3a; /* тёмно-розовый для тёмной темы */
+  color-scheme: light dark; /* поддержка светлой и тёмной темы */
+  color: #ffffff; /* текст белый для тёмной темы */
+  background-color: #8b3a3a; /* тёмно-розовый фон для тёмной темы */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none; /* отключаем синтез шрифтов */
+  text-rendering: optimizeLegibility; /* оптимизация рендеринга текста */
+  -webkit-font-smoothing: antialiased; /* сглаживание для WebKit */
+  -moz-osx-font-smoothing: grayscale; /* сглаживание для macOS */
 }
 
+/* Ссылки */
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: #646cff; /* основной цвет ссылок */
+  text-decoration: inherit; /* наследуемое оформление текста */
 }
 a:hover {
-  color: #535bf2;
+  color: #535bf2; /* цвет при наведении */
 }
 
+/* Основные стили body */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  display: flex; /* используем flex для центрирования */
+  place-items: center; /* центрируем контент по вертикали и горизонтали */
+  min-width: 320px; /* минимальная ширина экрана */
+  min-height: 100vh; /* минимальная высота экрана */
 }
 
+/* Заголовки */
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 3.2em; /* размер шрифта */
+  line-height: 1.1; /* межстрочный интервал */
 }
 
+/* Кнопки */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  border-radius: 8px; /* скругление углов */
+  border: 1px solid transparent; /* прозрачная граница по умолчанию */
+  padding: 0.6em 1.2em; /* внутренние отступы */
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+  background-color: #1a1a1a; /* тёмный фон кнопки */
+  cursor: pointer; /* указатель мыши */
+  transition: border-color 0.25s; /* плавное изменение границы */
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #646cff; /* цвет границы при наведении */
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto -webkit-focus-ring-color; /* стандартная обводка при фокусе */
 }
 
+/* Карточки */
 .card {
   padding: 2em;
 }
 
+/* Контейнер приложения */
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
+  max-width: 1280px; /* максимальная ширина приложения */
+  margin: 0 auto; /* центрирование */
   padding: 2rem;
-  text-align: center;
+  text-align: center; /* выравнивание текста по центру */
 }
 
 /* Светлая тема */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #333333; /* текст тёмный */
+    color: #333333; /* текст тёмный для светлой темы */
     background-color: #ffe6e6; /* светло-розовый фон */
   }
   a:hover {
-    color: #747bff;
+    color: #747bff; /* цвет ссылок при наведении в светлой теме */
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #f9f9f9; /* светлый фон кнопки в светлой теме */
   }
 }

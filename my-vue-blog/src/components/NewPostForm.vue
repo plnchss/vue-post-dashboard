@@ -4,7 +4,8 @@
     <input v-model="title" placeholder="Заголовок" />
     <textarea v-model="content" placeholder="Содержание"></textarea>
     <br />
-    <button @click="addPost" :disabled="saving">
+    <button @click="addPostHandler" :disabled="saving">
+      <span v-if="saving" class="spinner-btn"></span>
       {{ saving ? "Сохраняем..." : "Добавить" }}
     </button>
     <div v-if="draftExists" class="draft-note">
@@ -15,17 +16,20 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
-import { addNewPost } from "../services/api";
+import type { Ref } from "vue";
+
+interface Props {
+  addPost: (title: string, content: string) => Promise<void>;
+}
+const props = defineProps<Props>();
 
 const title = ref("");
 const content = ref("");
 const saving = ref(false);
-
 const DRAFT_KEY = "blog-draft";
-
-// Проверяем наличие черновика в localStorage
 const draftExists = ref(false);
 
+// Загружаем черновик при монтировании
 onMounted(() => {
   const draft = localStorage.getItem(DRAFT_KEY);
   if (draft) {
@@ -46,23 +50,22 @@ watch([title, content], ([newTitle, newContent]) => {
 });
 
 // Добавление нового поста
-async function addPost() {
+const addPostHandler = async () => {
   if (!title.value || !content.value) return;
 
   saving.value = true;
   try {
-    await addNewPost({ title: title.value, content: content.value });
-    // Очищаем форму и черновик
+    await props.addPost(title.value, content.value);
     title.value = "";
     content.value = "";
     localStorage.removeItem(DRAFT_KEY);
     draftExists.value = false;
-  } catch (e) {
+  } catch {
     alert("Ошибка при добавлении поста");
   } finally {
     saving.value = false;
   }
-}
+};
 </script>
 
 <style scoped>
@@ -73,7 +76,6 @@ async function addPost() {
   margin-bottom: 1rem;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.05);
 }
-
 input, textarea {
   width: 100%;
   padding: 0.5rem;
@@ -81,12 +83,10 @@ input, textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
 input:focus, textarea:focus {
   border-color: #007bff;
   outline: none;
 }
-
 button {
   padding: 0.4rem 0.8rem;
   border: none;
@@ -95,15 +95,17 @@ button {
   color: #fff;
   cursor: pointer;
 }
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.draft-note { margin-top: 0.5rem; font-size: 0.85rem; color: #666; }
+.spinner-btn {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  margin-right: 0.3rem;
+  animation: spin 0.8s linear infinite;
 }
-
-.draft-note {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: #666;
-}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
