@@ -84,6 +84,19 @@
       "published": true,
       "image": "https://cataas.com/cat?width=400&height=200&random=1765205100742",
       "updatedAt": "2025-12-08T14:47:55.740Z"
+    },
+    {
+      "id": "1765802655553",
+      "title": "fgkldg",
+      "content": "fgdfgd",
+      "author": {
+        "id": 1,
+        "name": "Polina :)"
+      },
+      "createdAt": "2025-12-15T12:44:15.553Z",
+      "published": true,
+      "image": "https://cataas.com/cat?width=400&height=200&random=1765802655553",
+      "updatedAt": "2025-12-15T12:44:29.750Z"
     }
   ]
 }
